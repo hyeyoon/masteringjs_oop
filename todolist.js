@@ -63,16 +63,23 @@ const Todo = class {
     }
   }
   update() {
-  	
+  	const [currentStatus, id, orderStatus] = this.order;
+    const index = this.todos.findIndex(todo => todo.id === Number(id));
+    if (index >= 0) {
+      this.handleDateTime(index, orderStatus)
+    } else {
+      console.log('유효한 명령을 입력하세요.');
+      return;
+    };
     this.printCurrentStatus();
   }
   formatTodos(accumulator, currentValue) {
     const status = this.order[1];
     if (currentValue.status === status) {
       if (status === 'done') {
-        accumulator.push(`${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}`);
+        accumulator.push(`"${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}"`);
       } else if (status === 'doing' || status === 'todo') {
-        accumulator.push(`${currentValue.id}, ${currentValue.task}`);
+        accumulator.push(`"${currentValue.id}, ${currentValue.task}"`);
       } 
     }
     return accumulator;
@@ -85,9 +92,6 @@ const Todo = class {
     const diffSeconds = Math.floor(diff % 60);
     return `${diffDays}일 ${diffHours}시간 ${diffMinutes}분 ${diffSeconds}초`
   }
-  getNow() {
-    return new Date();
-  }
   printCurrentStatus() {
     const currentStatus = [];
     this.statusList.forEach((status) => {
@@ -95,6 +99,23 @@ const Todo = class {
       currentStatus.push(`${status}: ${task.length}개`);
     })
     console.log('현재상태 :', currentStatus.join(", "));
+  }
+  handleDateTime(index, status) {
+    switch (status) {
+      case "doing":
+        this.todos[index].status = status;
+      	this.addDateTime(index, 'startAt');
+        break;
+      case "done":
+        this.todos[index].status = status;
+      	this.addDateTime(index, 'endAt');
+        break;
+      default: 
+      	console.log('유효한 명령을 입력하세요.');
+    }
+  }
+  addDateTime(index, key) {
+    this.todos[index][key] = new Date();
   }
 };
 
@@ -121,10 +142,14 @@ const Task = class {
 }
 
 const todo = new Todo();
-console.log('todo:', todo);
+
 todo.command("add$    자바스크립트 공부하기");
-todo.command("add$    자바스크립트");
-todo.command("add$    test");
+todo.command("add$    Study");
+todo.command("add$    TEST");
 todo.command("shOW     $todo");
 todo.command("update$0$doing");
 todo.command("shOW     $doing");
+setTimeout(() => {
+  todo.command("update$0$done");
+  todo.command("show$done");
+}, 5000)
