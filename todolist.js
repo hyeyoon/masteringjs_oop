@@ -45,6 +45,18 @@ const Todo = class {
       	console.log('유효한 명령을 입력하세요.');
     }
   }
+  add() {
+  	const task = new Task(this.currentId, this.order[1]);
+    this.todos.push(task);
+    this.currentId++;
+		console.log(`id: ${task.id}, "${task.task}" 항목이 추가되었습니다.`);
+  }
+  show() {
+    console.log('show');
+  }
+  update() {
+  	console.log('update')
+  }
 };
 
 const Utils = class {
@@ -59,9 +71,19 @@ const Utils = class {
   }
 }
 
+const Task = class {
+	constructor(itemId, task) {
+    this.id = itemId;
+    this.status = 'todo';
+    this.task = task;
+    this.startAt = null;
+    this.endAt = null;
+  }
+}
+
 const todo = new Todo();
 console.log('todo:', todo);
 todo.command("add$    자바스크립트 공부하기");
-// todo.command("shOW     $doing");
+todo.command("shOW     $todo");
 // todo.command("update$0$done");
 // todo.command("show$done");
