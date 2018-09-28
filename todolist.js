@@ -34,26 +34,26 @@ const Todo = class {
     const [order] = this.order;
     switch (order) {
     	case "add":
-      	this.add();
+      	this.addTodo();
         break;
       case "show":
-      	this.show();
+      	this.showTodo();
         break;
       case "update":
-      	this.update();
+      	this.updateTodo();
         break;
       default: 
       	console.log('유효한 명령을 입력하세요.');
     }
   }
-  add() {
+  addTodo() {
   	const task = new Task(this.currentId, this.order[1]);
     this.todos.push(task);
     this.currentId++;
 		console.log(`id: ${task.id}, "${task.task}" 항목이 추가되었습니다.`);
     this.printCurrentStatus();
   }
-  show() {
+  showTodo() {
     const status = this.order[1];
     const formattedTodos = this.todos.reduce(this.formatTodos.bind(this), []);
     if (formattedTodos.length) {
@@ -62,7 +62,7 @@ const Todo = class {
       console.log(`${status} 상태의 작업이 없습니다.`);
     }
   }
-  update() {
+  updateTodo() {
   	const [currentStatus, id, orderStatus] = this.order;
     const index = this.todos.findIndex(todo => todo.id === Number(id));
     if (index >= 0) {
@@ -143,6 +143,7 @@ const Task = class {
 
 const todo = new Todo();
 
+// Test Case
 todo.command("add$    자바스크립트 공부하기");
 todo.command("add$    Study");
 todo.command("add$    TEST");
