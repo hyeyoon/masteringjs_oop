@@ -21,11 +21,12 @@ const Todo = class {
     this.currentId = 0;
     this.order = [];
     this.utils = new Utils();
+    this.statusList = ['todo', 'doing', 'done'];
   }
   command(userCommand) {
     const utils = this.utils;
     this.order = utils.splitList(userCommand).map((item) => {
-      return utils.arrangeText(item);
+      return utils.formatText(item);
     })
     this.runCommand();
   }
@@ -50,12 +51,50 @@ const Todo = class {
     this.todos.push(task);
     this.currentId++;
 		console.log(`id: ${task.id}, "${task.task}" 항목이 추가되었습니다.`);
+    this.printCurrentStatus();
   }
   show() {
-    console.log('show');
+    const status = this.order[1];
+    const formattedTodos = this.todos.reduce(this.formatTodos.bind(this), []);
+    if (formattedTodos.length) {
+      console.log(formattedTodos.join(", "));
+    } else {
+      console.log(`${status} 상태의 작업이 없습니다.`);
+    }
   }
   update() {
-  	console.log('update')
+  	
+    this.printCurrentStatus();
+  }
+  formatTodos(accumulator, currentValue) {
+    const status = this.order[1];
+    if (currentValue.status === status) {
+      if (status === 'done') {
+        accumulator.push(`${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}`);
+      } else if (status === 'doing' || status === 'todo') {
+        accumulator.push(`${currentValue.id}, ${currentValue.task}`);
+      } 
+    }
+    return accumulator;
+  }
+  calcTime(todo) {
+    const diff = Math.abs((todo.endAt - todo.startAt) / 1000);
+    const diffDays = Math.floor(diff / 86400);
+    const diffHours = Math.floor(diff / 3600) % 24;
+    const diffMinutes = Math.floor(diff / 60) % 60;
+    const diffSeconds = Math.floor(diff % 60);
+    return `${diffDays}일 ${diffHours}시간 ${diffMinutes}분 ${diffSeconds}초`
+  }
+  getNow() {
+    return new Date();
+  }
+  printCurrentStatus() {
+    const currentStatus = [];
+    this.statusList.forEach((status) => {
+      const task = this.todos.filter(item => item.status === status);
+      currentStatus.push(`${status}: ${task.length}개`);
+    })
+    console.log('현재상태 :', currentStatus.join(", "));
   }
 };
 
@@ -66,7 +105,7 @@ const Utils = class {
   splitList(list) {
     return list.split(this.seperator);
   }
-  arrangeText(str) {
+  formatText(str) {
     return str.trim().toLowerCase();
   }
 }
@@ -84,6 +123,8 @@ const Task = class {
 const todo = new Todo();
 console.log('todo:', todo);
 todo.command("add$    자바스크립트 공부하기");
+todo.command("add$    자바스크립트");
+todo.command("add$    test");
 todo.command("shOW     $todo");
-// todo.command("update$0$done");
-// todo.command("show$done");
+todo.command("update$0$doing");
+todo.command("shOW     $doing");
