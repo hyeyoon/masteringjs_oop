@@ -27,6 +27,23 @@ const Todo = class {
     this.order = utils.splitList(userCommand).map((item) => {
       return utils.arrangeText(item);
     })
+    this.runCommand();
+  }
+  runCommand() {
+    const [order] = this.order;
+    switch (order) {
+    	case "add":
+      	this.add();
+        break;
+      case "show":
+      	this.show();
+        break;
+      case "update":
+      	this.update();
+        break;
+      default: 
+      	console.log('유효한 명령을 입력하세요.');
+    }
   }
 };
 
