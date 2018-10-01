@@ -22,6 +22,7 @@ const Todo = class {
     this.order = [];
     this.utils = utils;
     this.statusList = ['todo', 'doing', 'done'];
+    // this.defaultStatusCount = {todo: 0, doing: 0, done: 0};
   }
   command(userCommand) {
     const utils = this.utils;
@@ -75,13 +76,11 @@ const Todo = class {
   }
   formatTodos(accumulator, currentValue) {
     const status = this.order[1];
-    // if (currentValue.status === status) {
-      if (status === 'done') {
-        accumulator.push(`"${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}"`);
-      } else if (status === 'doing' || status === 'todo') {
-        accumulator.push(`"${currentValue.id}, ${currentValue.task}"`);
-      } 
-    // }
+    if (status === 'done') {
+      accumulator.push(`"${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}"`);
+    } else if (status === 'doing' || status === 'todo') {
+      accumulator.push(`"${currentValue.id}, ${currentValue.task}"`);
+    } 
     return accumulator;
   }
   calcTime(todo) {
@@ -93,11 +92,18 @@ const Todo = class {
     return `${diffDays}일 ${diffHours}시간 ${diffMinutes}분 ${diffSeconds}초`
   }
   printCurrentStatus() {
-    const currentStatus = [];
-    this.statusList.forEach((status) => {
-      const task = this.todos.filter(item => item.status === status);
-      currentStatus.push(`${status}: ${task.length}개`);
-    })
+    // const countStatus = this.todos.reduce((accumulator, currentValue) => {
+    //   accumulator[currentValue.status] = ++accumulator[currentValue.status] || 1;
+    //   return accumulator;
+    // }, this.defaultStatusCount);
+    // const currentStatus = Object.getOwnPropertyNames(countStatus).map((item) => `${item}: ${countStatus[item]}개`);
+    // console.log('현재상태 :', currentStatus.join(", "));
+
+    const currentStatus = this.statusList.reduce((accumulator, currentValue) => {
+      const task = this.todos.filter(item => item.status === currentValue);
+      accumulator.push(`${currentValue}: ${task.length}개`);
+      return accumulator;
+    }, [])
     console.log('현재상태 :', currentStatus.join(", "));
   }
   handleDateTime(index, status) {
