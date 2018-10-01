@@ -28,10 +28,10 @@ const Todo = class {
     this.order = utils.splitList(userCommand).map((item) => {
       return utils.formatText(item);
     })
-    this.runCommand();
+    this.runCommand(this.order);
   }
-  runCommand() {
-    const [order] = this.order;
+  runCommand(orderList) {
+    const [order] = orderList;
     switch (order) {
     	case "add":
       	this.addTodo();
