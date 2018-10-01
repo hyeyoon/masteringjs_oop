@@ -43,7 +43,7 @@ const Todo = class {
       	this.updateTodo();
         break;
       default: 
-      	console.log('유효한 명령을 입력하세요.');
+      	console.error('유효한 명령을 입력하세요.');
     }
   }
   addTodo() {
@@ -59,7 +59,7 @@ const Todo = class {
     if (formattedTodos.length) {
       console.log(formattedTodos.join(", "));
     } else {
-      console.log(`${status} 상태의 작업이 없습니다.`);
+      console.error(`${status} 상태의 작업이 없습니다.`);
     }
   }
   updateTodo() {
@@ -68,7 +68,7 @@ const Todo = class {
     if (index >= 0) {
       this.handleDateTime(index, orderStatus)
     } else {
-      console.log('유효한 명령을 입력하세요.');
+      console.error('유효한 명령을 입력하세요.');
       return;
     };
     this.printCurrentStatus();
@@ -111,7 +111,7 @@ const Todo = class {
       	this.addDateTime(index, 'endAt');
         break;
       default: 
-      	console.log('유효한 명령을 입력하세요.');
+      	console.error('유효한 명령을 입력하세요.');
     }
   }
   addDateTime(index, key) {
