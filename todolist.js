@@ -55,7 +55,7 @@ const Todo = class {
   }
   showTodo() {
     const status = this.order[1];
-    const formattedTodos = this.todos.reduce(this.formatTodos.bind(this), []);
+    const formattedTodos = this.todos.filter(todo => todo.status === status).reduce(this.formatTodos.bind(this), []);
     if (formattedTodos.length) {
       console.log(formattedTodos.join(", "));
     } else {
@@ -75,13 +75,13 @@ const Todo = class {
   }
   formatTodos(accumulator, currentValue) {
     const status = this.order[1];
-    if (currentValue.status === status) {
+    // if (currentValue.status === status) {
       if (status === 'done') {
         accumulator.push(`"${currentValue.id}, ${currentValue.task}, ${this.calcTime(currentValue)}"`);
       } else if (status === 'doing' || status === 'todo') {
         accumulator.push(`"${currentValue.id}, ${currentValue.task}"`);
       } 
-    }
+    // }
     return accumulator;
   }
   calcTime(todo) {
