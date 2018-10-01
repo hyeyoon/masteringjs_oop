@@ -16,11 +16,11 @@
  */
 
 const Todo = class {
-  constructor() {
+  constructor(utils) {
     this.todos = [];
     this.currentId = 0;
     this.order = [];
-    this.utils = new Utils();
+    this.utils = utils;
     this.statusList = ['todo', 'doing', 'done'];
   }
   command(userCommand) {
@@ -132,7 +132,7 @@ const Utils = class {
 }
 
 const Task = class {
-	constructor(itemId, task) {
+  constructor(itemId, task) {
     this.id = itemId;
     this.status = 'todo';
     this.task = task;
@@ -141,7 +141,7 @@ const Task = class {
   }
 }
 
-const todo = new Todo();
+const todo = new Todo(new Utils());
 
 // Test Case
 todo.command("add$    자바스크립트 공부하기");
